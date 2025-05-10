@@ -1,4 +1,4 @@
-import { Rule, ValidatedValue } from './rules'
+import { Rule, ValidatedValue } from './rules.js'
 
 import { validateBoolean } from './validators/validateBoolean.js'
 import { validateEnum } from './validators/validateEnum.js'

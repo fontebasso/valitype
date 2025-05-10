@@ -1,7 +1,7 @@
 {
   "name": "valitype",
   "description": "Lightweight validator for simple runtime types like string, number, boolean, URL, and enums.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "type": "module",
   "main": "dist/index.js",

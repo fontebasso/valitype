@@ -11,7 +11,8 @@ export function validateValue<T extends Rule>(
   raw: string | undefined,
   rule: T
 ): ValidatedValue<T> {
-  const value = raw ?? (rule.default !== undefined ? String(rule.default) : undefined);
+  const value =
+    raw ?? (rule.default !== undefined ? String(rule.default) : undefined)
 
   if (rule.type === 'string')
     return validateString(key, value) as ValidatedValue<T>

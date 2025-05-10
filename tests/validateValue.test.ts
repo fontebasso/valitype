@@ -15,7 +15,9 @@ describe('validateValue', () => {
 
   it('throws if required string is missing', () => {
     const rule: Rule = { type: 'string', required: true }
-    expect(() => validateValue('FOO', undefined, rule)).toThrow('FOO is required')
+    expect(() => validateValue('FOO', undefined, rule)).toThrow(
+      'FOO is required'
+    )
   })
 
   it('validates number', () => {
@@ -25,7 +27,9 @@ describe('validateValue', () => {
 
   it('throws on invalid number', () => {
     const rule: Rule = { type: 'number' }
-    expect(() => validateValue('PORT', 'abc', rule)).toThrow('PORT must be a valid number')
+    expect(() => validateValue('PORT', 'abc', rule)).toThrow(
+      'PORT must be a valid number'
+    )
   })
 
   it('validates boolean true/false', () => {
@@ -36,17 +40,23 @@ describe('validateValue', () => {
 
   it('throws on invalid boolean', () => {
     const rule: Rule = { type: 'boolean' }
-    expect(() => validateValue('DEBUG', 'yes', rule)).toThrow('DEBUG must be either "true" or "false"')
+    expect(() => validateValue('DEBUG', 'yes', rule)).toThrow(
+      'DEBUG must be either "true" or "false"'
+    )
   })
 
   it('validates url', () => {
     const rule: Rule = { type: 'url' }
-    expect(validateValue('API', 'https://example.com', rule)).toBe('https://example.com')
+    expect(validateValue('API', 'https://example.com', rule)).toBe(
+      'https://example.com'
+    )
   })
 
   it('throws on invalid url', () => {
     const rule: Rule = { type: 'url' }
-    expect(() => validateValue('API', 'notaurl', rule)).toThrow('API must be a valid URL')
+    expect(() => validateValue('API', 'notaurl', rule)).toThrow(
+      'API must be a valid URL'
+    )
   })
 
   it('validates enum', () => {
@@ -56,20 +66,25 @@ describe('validateValue', () => {
 
   it('throws on invalid enum', () => {
     const rule: Rule = { type: { enum: ['dev', 'prod'] } }
-    expect(() => validateValue('NODE_ENV', 'staging', rule)).toThrow('NODE_ENV must be one of: dev, prod')
+    expect(() => validateValue('NODE_ENV', 'staging', rule)).toThrow(
+      'NODE_ENV must be one of: dev, prod'
+    )
   })
 
   it('throws if enum value is undefined and required', () => {
     const rule: Rule = {
       type: { enum: ['dev', 'prod'] },
-      required: true
-    };
-    expect(() => validateValue('NODE_ENV', undefined, rule))
-      .toThrow('NODE_ENV is required and must be one of: dev, prod')
+      required: true,
+    }
+    expect(() => validateValue('NODE_ENV', undefined, rule)).toThrow(
+      'NODE_ENV is required and must be one of: dev, prod'
+    )
   })
 
   it('throws on unknown rule type', () => {
     const rule = { type: 'unknown' } as unknown as Rule
-    expect(() => validateValue('FOO', 'bar', rule)).toThrow('FOO has an unknown rule type')
+    expect(() => validateValue('FOO', 'bar', rule)).toThrow(
+      'FOO has an unknown rule type'
+    )
   })
 })

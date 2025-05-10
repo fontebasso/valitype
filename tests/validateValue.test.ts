@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { validateValue } from '../src/core/validateValue'
-import { Rule } from '../src/core/rules'
+import { validateValue } from '../src/core/validateValue.js'
+import { Rule } from '../src/core/rules.js'
 
 describe('validateValue', () => {
   it('validates string', () => {

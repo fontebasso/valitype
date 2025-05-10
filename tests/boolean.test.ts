@@ -1,4 +1,4 @@
-import { validateBoolean } from '../src/core/validators/validateBoolean'
+import { validateBoolean } from '../src/core/validators/validateBoolean.js'
 
 import { describe, it, expect } from 'vitest'
 describe('validateBoolean', () => {

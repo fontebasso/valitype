@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { validateUrl } from '../src/core/validators/validateUrl'
+import { validateUrl } from '../src/core/validators/validateUrl.js'
 
 describe('validateUrl', () => {
   it('throws if value is undefined', () => {

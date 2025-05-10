@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { validateValue, Rule } from '../src'
+import { validateValue, Rule } from '../src/index.js'
 
 describe('index exports', () => {
   it('exports validateValue', () => {

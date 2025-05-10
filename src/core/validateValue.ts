@@ -1,10 +1,10 @@
 import { Rule, ValidatedValue } from './rules'
 
-import { validateBoolean } from './validators/validateBoolean'
-import { validateEnum } from './validators/validateEnum'
-import { validateNumber } from './validators/validateNumber'
-import { validateString } from './validators/validateString'
-import { validateUrl } from './validators/validateUrl'
+import { validateBoolean } from './validators/validateBoolean.js'
+import { validateEnum } from './validators/validateEnum.js'
+import { validateNumber } from './validators/validateNumber.js'
+import { validateString } from './validators/validateString.js'
+import { validateUrl } from './validators/validateUrl.js'
 
 export function validateValue<T extends Rule>(
   key: string,

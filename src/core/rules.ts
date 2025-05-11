@@ -28,7 +28,17 @@ export type EnumRule = {
   default?: string
 }
 
-export type Rule = StringRule | NumberRule | BooleanRule | UrlRule | EnumRule
+export type CustomValidatorFn = (value: string | undefined) => boolean | string
+
+export type CustomRule = {
+  type: 'custom'
+  validator: CustomValidatorFn
+  required?: boolean
+  default?: string
+  errorMessage?: string
+}
+
+export type Rule = StringRule | NumberRule | BooleanRule | UrlRule | EnumRule | CustomRule
 export type RuleTypeToValue<T extends Rule['type']> = T extends 'string'
   ? string
   : T extends 'number'
@@ -39,7 +49,9 @@ export type RuleTypeToValue<T extends Rule['type']> = T extends 'string'
         ? string
         : T extends { enum: readonly string[] }
           ? string
-          : never
+          : T extends 'custom'
+            ? string
+            : never
 
 export type RuleWithValue<T extends Rule> = T & {
   type: T['type']

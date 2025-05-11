@@ -4,6 +4,7 @@ tests/
 .vitest/
 vitest.config.ts
 tsconfig.json
+tsup.config.json
 
 # local only
 *.log

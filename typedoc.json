@@ -1,6 +1,6 @@
 {
     "out": "docs",
-    "entryPoints": ["src/index.ts"],
+    "entryPoints": ["src/core/rules.ts", "src/core/validateValue.ts", "src/core/validators/*.ts"],
     "readme": "README.typedoc.md"
   }
   

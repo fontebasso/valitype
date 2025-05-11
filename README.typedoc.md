@@ -3,17 +3,15 @@
 [![npm audit signatures](https://img.shields.io/badge/npm%20audit-signed%20%26%20attested-brightgreen?logo=npm)](https://docs.npmjs.com/generating-provenance-statements)
 [![license](https://img.shields.io/npm/l/valitype)](LICENSE)
 
-**Lightweight validator for simple runtime types like string, number, boolean, URL, and enums.**
-
-valitype is a small and focused library that validates primitive values like strings, numbers, booleans, URLs, and enums. It was designed to be used in tools like build-time env validators but can be used in any JavaScript/TypeScript project where runtime type validation is required.
+A lightweight TypeScript validation library for environment variables and configuration.
 
 ## Features
 
-- Supports string, number, boolean, url, and enum
-- Clear error messages with context
-- Optional required and default handling
-- Fully typed
-- Zero dependencies
+- Validate values against predefined types (string, number, boolean, url, enum)
+- Support for custom validators with helpful utilities
+- Required field validation
+- Default values
+- Clear error messages
 
 ## Installation
 
@@ -21,74 +19,126 @@ valitype is a small and focused library that validates primitive values like str
 npm install valitype
 ```
 
-## Basic Usage
+## Usage
 
-### Validate a required number
+```typescript
+import { validateValue, validators } from 'valitype';
 
-```ts
-import { validateValue } from 'valitype'
-import type { Rule } from 'valitype'
+// Basic type validation
+validateValue('PORT', '8080', { type: 'number', required: true }); // returns 8080 as number
+validateValue('DEBUG', 'true', { type: 'boolean' }); // returns true as boolean
+validateValue('API_URL', 'https://api.example.com', { type: 'url', required: true }); // validates URL format
 
-const rule: Rule = { type: 'number', required: true }
+// Enum validation
+validateValue('NODE_ENV', 'development', { 
+  type: { enum: ['development', 'production', 'test'] },
+  default: 'development'
+});
 
-const port = validateValue('PORT', process.env.PORT, rule)
-// port: number
+// Custom validation
+validateValue('API_KEY', 'abc123', {
+  type: 'custom',
+  validator: validators.regex(/^[a-z0-9]{6}$/),
+  errorMessage: 'API_KEY must be 6 alphanumeric characters',
+  required: true
+});
 ```
 
-### Validate with default and enum
+## Validation Types
 
-```ts
-const rule: Rule = {
-  type: { enum: ['dev', 'staging', 'prod'] },
-  default: 'dev'
-}
-
-const env = validateValue('NODE_ENV', process.env.NODE_ENV, rule)
-// env: 'dev' | 'staging' | 'prod'
+### String
+```typescript
+{ type: 'string', required?: boolean, default?: string }
 ```
 
-### Validate multiple values with a schema
+### Number
+```typescript
+{ type: 'number', required?: boolean, default?: number }
+```
 
-```ts
-const schema: Record<string, Rule> = {
-  API_URL: { type: 'url', required: true },
-  DEBUG: { type: 'boolean', default: false },
-  VERSION: { type: 'string', default: '1.0.0' },
+### Boolean
+```typescript
+{ type: 'boolean', required?: boolean, default?: boolean }
+```
+
+### URL
+```typescript
+{ type: 'url', required?: boolean, default?: string }
+```
+
+### Enum
+```typescript
+{ type: { enum: string[] }, required?: boolean, default?: string }
+```
+
+### Custom
+```typescript
+{ 
+  type: 'custom', 
+  validator: (value: string | undefined) => boolean | string,
+  required?: boolean, 
+  default?: string,
+  errorMessage?: string 
 }
+```
 
-const config = Object.fromEntries(
-  Object.entries(schema).map(([key, rule]) => [
-    key,
-    validateValue(key, process.env[key], rule)
-  ])
+## Custom Validators
+
+The library includes several built-in validator utilities:
+
+### Regex Validator
+```typescript
+validators.regex(/^[A-Z]{3}$/, 'Must be 3 uppercase letters')
+```
+
+### Range Validator
+```typescript
+validators.range(1, 100, 'Value must be between 1 and 100')
+```
+
+### OneOf Validator
+```typescript
+validators.oneOf(['apple', 'banana', 'orange'], 'Must be a valid fruit')
+```
+
+### Date Validator
+```typescript
+validators.date('YYYY-MM-DD', 'Must be a valid date')
+```
+
+### JSON Validator
+```typescript
+validators.json('Must be valid JSON')
+```
+
+### AWS ARN Validator
+```typescript
+validators.awsArn('lambda', 'Must be a valid Lambda ARN')
+```
+
+### Combining Validators
+```typescript
+validators.all(
+  validators.regex(/^[A-Z]/),
+  validators.oneOf(['Alpha', 'Beta', 'Gamma'])
 )
-
-console.log(config)
-/*
-{
-  API_URL: 'https://api.example.com',
-  DEBUG: false,
-  VERSION: '1.0.0'
-}
-*/
 ```
 
-## Types
+## Error Handling
 
-Supported `Rule` definitions
+The library throws descriptive errors when validation fails:
 
-```ts
-type Rule =
-  | { type: 'string'; required?: boolean; default?: string }
-  | { type: 'number'; required?: boolean; default?: number }
-  | { type: 'boolean'; required?: boolean; default?: boolean }
-  | { type: 'url'; required?: boolean; default?: string }
-  | { type: { enum: string[] }; required?: boolean; default?: string }
+```typescript
+try {
+  validateValue('PORT', 'abc', { type: 'number', required: true });
+} catch (error) {
+  console.error(error.message); // "PORT must be a number"
+}
 ```
 
 ## Contributing
 
-Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## License
 

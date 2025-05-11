@@ -13,6 +13,7 @@ export default [
       'node_modules',
       'examples',
       'vitest.config.ts',
+      'tsup.config.ts',
     ],
   },
   {

@@ -1,7 +1,7 @@
 {
   "name": "valitype",
   "description": "A lightweight TypeScript validation library for environment variables and configuration.",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "private": false,
   "type": "module",
   "main": "dist/index.js",

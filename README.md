@@ -2,7 +2,8 @@
 
 [![tests](https://github.com/fontebasso/valitype/actions/workflows/tests.yml/badge.svg)](https://github.com/fontebasso/valitype/actions/workflows/tests.yml)
 [![npm](https://img.shields.io/npm/v/valitype)](https://www.npmjs.com/package/valitype)
-[![npm audit signatures](https://img.shields.io/badge/npm%20audit-signed%20%26%20attested-brightgreen?logo=npm)](https://docs.npmjs.com/generating-provenance-statements)
+[![npm downloads](https://img.shields.io/npm/dw/valitype)](https://www.npmjs.com/package/valitype)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/valitype)](https://bundlephobia.com/package/valitype)
 [![license](https://img.shields.io/npm/l/valitype)](LICENSE)
 
 Type-safe environment variable validation for TypeScript — zero dependencies, structured errors, and built-in validators for the most common real-world cases.

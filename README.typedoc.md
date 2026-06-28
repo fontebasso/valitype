@@ -6,13 +6,6 @@
 
 Type-safe environment variable validation for TypeScript — zero dependencies, structured errors, and built-in validators for the most common real-world cases.
 
-## Why valitype
-
-- **Zero dependencies**: nothing to audit, nothing to break
-- **Type-safe by default**: `validateValue` returns the correct TypeScript type based on the rule
-- **Structured errors**: `ValidationError` carries `key`, `value`, and `code` so you can handle failures programmatically
-- **Strict by design**: numbers reject hex and scientific notation; URLs require `http`/`https`; date formats are actually enforced
-
 ## Installation
 
 ```bash
@@ -41,6 +34,39 @@ const config = {
 ```
 
 If any value fails, a `ValidationError` is thrown with the field name, the received value, and a machine-readable code. Before your app ever starts.
+
+## Why valitype
+
+- **Zero dependencies**: nothing to audit, nothing to break
+- **Type-safe by default**: `validateValue` returns the correct TypeScript type based on the rule
+- **Structured errors**: `ValidationError` carries `key`, `value`, and `code` so you can handle failures programmatically
+- **Strict by design**: numbers reject hex and scientific notation; URLs require `http`/`https`; date formats are actually enforced
+
+## Why not Zod, Joi, or Yup?
+
+Use [Zod](https://zod.dev/), [Joi](https://joi.dev/), or [Yup](https://github.com/jquense/yup) when you need a full schema validation library for complex objects, nested data, forms, API payloads, transformations, or advanced validation flows.
+
+Use `valitype` when you need a small, focused validator for environment variables and runtime config:
+
+* Zero runtime dependencies
+* Simple primitive validation
+* Strict parsing for numbers, booleans, URLs, dates, enums, and custom rules
+* Structured errors for configuration failures
+* Designed for `process.env`, package options, feature flags, and app config
+
+`valitype` is not a replacement for Zod, Joi, or Yup. It is a focused alternative when a full schema validation framework would be more than you need.
+
+## Node.js support
+
+`valitype` supports the following Node.js versions:
+
+| Node.js | Status    |
+| ------- | --------- |
+| 20      | Supported |
+| 22      | Supported |
+| 24      | Supported |
+
+The test suite runs against all supported Node.js versions to ensure compatibility across the supported runtime matrix.
 
 ## Types
 
@@ -100,6 +126,16 @@ try {
 ```
 
 Available codes: `REQUIRED` · `INVALID_NUMBER` · `INVALID_BOOLEAN` · `INVALID_URL` · `INVALID_ENUM` · `INVALID_CUSTOM` · `UNKNOWN_RULE`
+
+## Security and supply chain
+
+`valitype` is built with a minimal and transparent supply chain:
+
+* Zero runtime dependencies
+* Automated tests on GitHub Actions
+* Published with npm Trusted Publishing and provenance
+* CodeQL code scanning enabled via GitHub default setup
+* MIT licensed
 
 ## Contributing
 

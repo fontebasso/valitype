@@ -8,9 +8,10 @@ export function validateCustom(
 ): string {
   const result = validator(value)
   if (result !== true) {
-    const message = typeof result === 'string'
-      ? result
-      : errorMessage || `${key} failed custom validation`
+    const message =
+      typeof result === 'string'
+        ? result
+        : errorMessage || `${key} failed custom validation`
     throw new ValidationError({ key, value, code: 'INVALID_CUSTOM', message })
   }
   return value as string

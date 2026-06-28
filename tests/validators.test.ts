@@ -15,7 +15,9 @@ describe('Validator utilities', () => {
 
     it('should return error message for non-matching values', () => {
       const validator = validators.regex(/^test$/)
-      expect(validator('not-test')).toBe('Value does not match pattern /^test$/')
+      expect(validator('not-test')).toBe(
+        'Value does not match pattern /^test$/'
+      )
     })
 
     it('should return custom error message when provided', () => {
@@ -106,12 +108,16 @@ describe('Validator utilities', () => {
 
     it('should include format in error message when provided', () => {
       const validator = validators.date('YYYY-MM-DD')
-      expect(validator('not-a-date')).toBe('Value must be a valid date in format YYYY-MM-DD')
+      expect(validator('not-a-date')).toBe(
+        'Value must be a valid date in format YYYY-MM-DD'
+      )
     })
 
     it('should reject values that do not match the specified format', () => {
       const validator = validators.date('YYYY-MM-DD')
-      expect(validator('01/01/2023')).toBe('Value must be a valid date in format YYYY-MM-DD')
+      expect(validator('01/01/2023')).toBe(
+        'Value must be a valid date in format YYYY-MM-DD'
+      )
     })
 
     it('should return custom error message when provided', () => {
@@ -150,17 +156,25 @@ describe('Validator utilities', () => {
 
     it('should return true for valid ARN strings', () => {
       const validator = validators.awsArn()
-      expect(validator('arn:aws:lambda:us-east-1:123456789012:function:my-function')).toBe(true)
+      expect(
+        validator('arn:aws:lambda:us-east-1:123456789012:function:my-function')
+      ).toBe(true)
     })
 
     it('should return true for AWS China partition ARNs', () => {
       const validator = validators.awsArn()
-      expect(validator('arn:aws-cn:lambda:cn-north-1:123456789012:function:my-fn')).toBe(true)
+      expect(
+        validator('arn:aws-cn:lambda:cn-north-1:123456789012:function:my-fn')
+      ).toBe(true)
     })
 
     it('should return true for AWS GovCloud partition ARNs', () => {
       const validator = validators.awsArn()
-      expect(validator('arn:aws-us-gov:lambda:us-gov-east-1:123456789012:function:my-fn')).toBe(true)
+      expect(
+        validator(
+          'arn:aws-us-gov:lambda:us-gov-east-1:123456789012:function:my-fn'
+        )
+      ).toBe(true)
     })
 
     it('should return error message for invalid ARN strings', () => {
@@ -170,12 +184,16 @@ describe('Validator utilities', () => {
 
     it('should return true for valid ARN with matching service', () => {
       const validator = validators.awsArn('lambda')
-      expect(validator('arn:aws:lambda:us-east-1:123456789012:function:my-function')).toBe(true)
+      expect(
+        validator('arn:aws:lambda:us-east-1:123456789012:function:my-function')
+      ).toBe(true)
     })
 
     it('should return error message for ARN with non-matching service', () => {
       const validator = validators.awsArn('lambda')
-      expect(validator('arn:aws:s3:us-east-1:123456789012:bucket:my-bucket')).toBe('ARN must be for service: lambda')
+      expect(
+        validator('arn:aws:s3:us-east-1:123456789012:bucket:my-bucket')
+      ).toBe('ARN must be for service: lambda')
     })
 
     it('should return custom error message when provided', () => {

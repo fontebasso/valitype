@@ -15,19 +15,27 @@ describe('validateNumber', () => {
   })
 
   it('throws for empty string', () => {
-    expect(() => validateNumber('PORT', '')).toThrow('PORT must be a valid number')
+    expect(() => validateNumber('PORT', '')).toThrow(
+      'PORT must be a valid number'
+    )
   })
 
   it('throws for hexadecimal notation', () => {
-    expect(() => validateNumber('PORT', '0x10')).toThrow('PORT must be a valid number')
+    expect(() => validateNumber('PORT', '0x10')).toThrow(
+      'PORT must be a valid number'
+    )
   })
 
   it('throws for scientific notation', () => {
-    expect(() => validateNumber('PORT', '1e5')).toThrow('PORT must be a valid number')
+    expect(() => validateNumber('PORT', '1e5')).toThrow(
+      'PORT must be a valid number'
+    )
   })
 
   it('throws for value with leading whitespace', () => {
-    expect(() => validateNumber('PORT', ' 8080')).toThrow('PORT must be a valid number')
+    expect(() => validateNumber('PORT', ' 8080')).toThrow(
+      'PORT must be a valid number'
+    )
   })
 
   it('parses valid integer strings', () => {

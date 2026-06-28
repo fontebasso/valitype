@@ -64,9 +64,9 @@ Use `valitype` when you need focused TypeScript and JavaScript validation for en
 
 | Node.js | Status    |
 | ------- | --------- |
-| 20      | Supported |
 | 22      | Supported |
 | 24      | Supported |
+| 26      | Supported |
 
 The test suite runs against all supported Node.js versions to ensure compatibility across the supported runtime matrix.
 

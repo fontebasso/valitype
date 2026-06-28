@@ -9,15 +9,17 @@ import { validateString } from './validators/validateString.js'
 import { validateUrl } from './validators/validateUrl.js'
 
 function dispatchRule(key: string, value: string, rule: Rule): unknown {
-  if (rule.type === 'string') return validateString(key, value)
-  if (rule.type === 'number') return validateNumber(key, value)
-  if (rule.type === 'boolean') return validateBoolean(key, value)
-  if (rule.type === 'url') return validateUrl(key, value)
   if (typeof rule.type === 'object' && 'enum' in rule.type)
     return validateEnum(key, value, rule.type.enum)
-  if (rule.type === 'custom')
-    return validateCustom(key, value, rule.validator, rule.errorMessage)
-  const _exhaustive: never = rule
+
+  const r = rule as Exclude<Rule, EnumRule>
+  if (r.type === 'string') return validateString(key, value)
+  if (r.type === 'number') return validateNumber(key, value)
+  if (r.type === 'boolean') return validateBoolean(key, value)
+  if (r.type === 'url') return validateUrl(key, value)
+  if (r.type === 'custom') return validateCustom(key, value, r.validator, r.errorMessage)
+
+  const _exhaustive: never = r
   throw new ValidationError({
     key,
     value,

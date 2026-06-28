@@ -10,10 +10,10 @@ Type-safe environment variable validation for TypeScript — zero dependencies, 
 
 ## Why valitype
 
-- **Zero dependencies** — nothing to audit, nothing to break
-- **Type-safe by default** — `validateValue` returns the correct TypeScript type based on the rule
-- **Structured errors** — `ValidationError` carries `key`, `value`, and `code` so you can handle failures programmatically
-- **Strict by design** — numbers reject hex and scientific notation; URLs require `http`/`https`; date formats are actually enforced
+- **Zero dependencies**: nothing to audit, nothing to break
+- **Type-safe by default**: `validateValue` returns the correct TypeScript type based on the rule
+- **Structured errors**: `ValidationError` carries `key`, `value`, and `code` so you can handle failures programmatically
+- **Strict by design**: numbers reject hex and scientific notation; URLs require `http`/`https`; date formats are actually enforced
 
 ## Installation
 
@@ -42,7 +42,7 @@ const config = {
 }
 ```
 
-If any value fails, a `ValidationError` is thrown with the field name, the received value, and a machine-readable code — before your app ever starts.
+If any value fails, a `ValidationError` is thrown with the field name, the received value, and a machine-readable code. Before your app ever starts.
 
 ## Types
 

@@ -44,7 +44,7 @@ jobs:
           ADD:    ${{ steps.compare.outputs.add }}
           DROP:   ${{ steps.compare.outputs.drop }}
         run: |
-          open=$(gh issue list --state open --search "[nodejs-audit] in:title" --json number --jq length)
+          open=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "[nodejs-audit] in:title" --json number --jq length)
           [ "$open" -gt 0 ] && echo "Audit issue already open, skipping." && exit 0
 
           body=$(mktemp)
@@ -61,6 +61,7 @@ jobs:
           BODY
 
           gh issue create \
+            --repo "$GITHUB_REPOSITORY" \
             --title "chore: [nodejs-audit] review supported Node.js versions ($(date +%Y-%m-%d))" \
             --label "compatibility" \
             --body-file "$body"

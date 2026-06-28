@@ -50,6 +50,16 @@ describe('Validator utilities', () => {
       expect(validator('abc')).toBe('Value must be between 1 and 10')
     })
 
+    it('should return error message for hexadecimal values', () => {
+      const validator = validators.range(1, 10)
+      expect(validator('0x5')).toBe('Value must be between 1 and 10')
+    })
+
+    it('should return error message for empty string', () => {
+      const validator = validators.range(1, 10)
+      expect(validator('')).toBe('Value must be between 1 and 10')
+    })
+
     it('should return custom error message when provided', () => {
       const validator = validators.range(1, 10, 'Custom error')
       expect(validator('11')).toBe('Custom error')
@@ -99,6 +109,11 @@ describe('Validator utilities', () => {
       expect(validator('not-a-date')).toBe('Value must be a valid date in format YYYY-MM-DD')
     })
 
+    it('should reject values that do not match the specified format', () => {
+      const validator = validators.date('YYYY-MM-DD')
+      expect(validator('01/01/2023')).toBe('Value must be a valid date in format YYYY-MM-DD')
+    })
+
     it('should return custom error message when provided', () => {
       const validator = validators.date('YYYY-MM-DD', 'Custom error')
       expect(validator('not-a-date')).toBe('Custom error')
@@ -136,6 +151,16 @@ describe('Validator utilities', () => {
     it('should return true for valid ARN strings', () => {
       const validator = validators.awsArn()
       expect(validator('arn:aws:lambda:us-east-1:123456789012:function:my-function')).toBe(true)
+    })
+
+    it('should return true for AWS China partition ARNs', () => {
+      const validator = validators.awsArn()
+      expect(validator('arn:aws-cn:lambda:cn-north-1:123456789012:function:my-fn')).toBe(true)
+    })
+
+    it('should return true for AWS GovCloud partition ARNs', () => {
+      const validator = validators.awsArn()
+      expect(validator('arn:aws-us-gov:lambda:us-gov-east-1:123456789012:function:my-fn')).toBe(true)
     })
 
     it('should return error message for invalid ARN strings', () => {
@@ -190,6 +215,14 @@ describe('Validator utilities', () => {
         validators.oneOf(['Alpha', 'Beta', 'Gamma'])
       )
       expect(validator(undefined)).toBe(true)
+    })
+
+    it('should silently skip non-function entries', () => {
+      const validator = validators.all(
+        validators.regex(/^[A-Z]/),
+        null as unknown as ReturnType<typeof validators.regex>
+      )
+      expect(validator('Alpha')).toBe(true)
     })
   })
 })

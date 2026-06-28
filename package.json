@@ -1,7 +1,7 @@
 {
   "name": "valitype",
   "description": "Type-safe environment variable validation for TypeScript — zero dependencies, structured errors, and built-in validators.",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "private": false,
   "type": "module",
   "main": "dist/index.js",

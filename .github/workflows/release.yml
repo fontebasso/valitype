@@ -33,6 +33,4 @@ jobs:
           npm run build:umd
 
       - name: Publish with provenance and signature
-        run: npm publish --access public --provenance --sign
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public

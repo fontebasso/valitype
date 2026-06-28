@@ -1,3 +1,5 @@
+import { ValidationError } from '../ValidationError.js'
+
 export function validateCustom(
   key: string,
   value: string | undefined,
@@ -5,14 +7,11 @@ export function validateCustom(
   errorMessage?: string
 ): string {
   const result = validator(value)
-  
   if (result !== true) {
-    const message = typeof result === 'string' 
-      ? result 
+    const message = typeof result === 'string'
+      ? result
       : errorMessage || `${key} failed custom validation`
-    
-    throw new Error(message)
+    throw new ValidationError({ key, value, code: 'INVALID_CUSTOM', message })
   }
-
   return value as string
 }

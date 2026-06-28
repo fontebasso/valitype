@@ -1,10 +1,15 @@
+import { ValidationError } from '../ValidationError.js'
+
 export function validateUrl(key: string, value: string | undefined): string {
   if (value === undefined)
-    throw new Error(`${key} is required and must be a URL`)
+    throw new ValidationError({ key, value, code: 'REQUIRED', message: `${key} is required and must be a URL` })
+  let url: URL
   try {
-    new URL(value)
-    return value
+    url = new URL(value)
   } catch {
-    throw new Error(`${key} must be a valid URL`)
+    throw new ValidationError({ key, value, code: 'INVALID_URL', message: `${key} must be a valid URL` })
   }
+  if (url.protocol !== 'http:' && url.protocol !== 'https:')
+    throw new ValidationError({ key, value, code: 'INVALID_URL', message: `${key} must be a valid URL` })
+  return value
 }

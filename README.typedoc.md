@@ -4,7 +4,7 @@
 [![bundle size](https://img.shields.io/bundlephobia/minzip/valitype)](https://bundlephobia.com/package/valitype)
 [![license](https://img.shields.io/npm/l/valitype)](LICENSE)
 
-Type-safe environment variable validation for TypeScript — zero dependencies, structured errors, and built-in validators for the most common real-world cases.
+Type-safe environment variable and runtime config validation for TypeScript and JavaScript — zero dependencies, structured errors, and built-in validators for common `process.env` and app config use cases.
 
 ## Installation
 
@@ -15,7 +15,7 @@ npm install valitype
 ## Quick start
 
 ```typescript
-import { validateValue, validators, ValidationError } from 'valitype'
+import { validateValue, validators } from 'valitype'
 
 const config = {
   port: validateValue('PORT', process.env.PORT, { type: 'number', required: true }),
@@ -44,17 +44,17 @@ If any value fails, a `ValidationError` is thrown with the field name, the recei
 
 ## Why not Zod, Joi, or Yup?
 
-Use [Zod](https://zod.dev/), [Joi](https://joi.dev/), or [Yup](https://github.com/jquense/yup) when you need a full schema validation library for complex objects, nested data, forms, API payloads, transformations, or advanced validation flows.
+[Zod](https://zod.dev/), [Joi](https://joi.dev/), and [Yup](https://github.com/jquense/yup) are great full schema validation libraries. Use them when you need complex object validation, nested schemas, arrays, forms, API payload validation, transformations, parsing pipelines, or advanced validation flows.
 
-Use `valitype` when you need a small, focused validator for environment variables and runtime config:
+Use `valitype` when you need focused TypeScript and JavaScript validation for environment variables, `process.env`, package options, feature flags, and runtime config:
 
-* Zero runtime dependencies
-* Simple primitive validation
-* Strict parsing for numbers, booleans, URLs, dates, enums, and custom rules
-* Structured errors for configuration failures
-* Designed for `process.env`, package options, feature flags, and app config
+- Zero runtime dependencies
+- Simple primitive validation
+- Strict parsing for numbers, booleans, URLs, dates, enums, and custom rules
+- Structured errors for configuration failures
+- Small API designed for app startup and config validation
 
-`valitype` is not a replacement for Zod, Joi, or Yup. It is a focused alternative when a full schema validation framework would be more than you need.
+`valitype` is not a replacement for Zod, Joi, or Yup. It is a small alternative when a full schema validation framework would be more than you need.
 
 ## Node.js support
 
@@ -62,9 +62,9 @@ Use `valitype` when you need a small, focused validator for environment variable
 
 | Node.js | Status    |
 | ------- | --------- |
-| 20      | Supported |
 | 22      | Supported |
 | 24      | Supported |
+| 26      | Supported |
 
 The test suite runs against all supported Node.js versions to ensure compatibility across the supported runtime matrix.
 
@@ -131,15 +131,15 @@ Available codes: `REQUIRED` · `INVALID_NUMBER` · `INVALID_BOOLEAN` · `INVALID
 
 `valitype` is built with a minimal and transparent supply chain:
 
-* Zero runtime dependencies
-* Automated tests on GitHub Actions
-* Published with npm Trusted Publishing and provenance
-* CodeQL code scanning enabled via GitHub default setup
-* MIT licensed
+- Zero runtime dependencies
+- Automated tests on GitHub Actions
+- Published with npm Trusted Publishing and provenance
+- CodeQL code scanning enabled via GitHub default setup
+- MIT licensed
 
 ## Contributing
 
-Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) file.
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

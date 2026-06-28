@@ -27,10 +27,14 @@ describe('validateUrl', () => {
   })
 
   it('passes for https:// URL', () => {
-    expect(validateUrl('API_URL', 'https://example.com')).toBe('https://example.com')
+    expect(validateUrl('API_URL', 'https://example.com')).toBe(
+      'https://example.com'
+    )
   })
 
   it('passes for http:// URL', () => {
-    expect(validateUrl('API_URL', 'http://localhost:3000')).toBe('http://localhost:3000')
+    expect(validateUrl('API_URL', 'http://localhost:3000')).toBe(
+      'http://localhost:3000'
+    )
   })
 })

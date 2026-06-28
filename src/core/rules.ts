@@ -38,7 +38,13 @@ export type CustomRule = {
   errorMessage?: string
 }
 
-export type Rule = StringRule | NumberRule | BooleanRule | UrlRule | EnumRule | CustomRule
+export type Rule =
+  | StringRule
+  | NumberRule
+  | BooleanRule
+  | UrlRule
+  | EnumRule
+  | CustomRule
 export type RuleTypeToValue<T extends Rule['type']> = T extends 'string'
   ? string
   : T extends 'number'

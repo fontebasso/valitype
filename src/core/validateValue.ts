@@ -17,7 +17,8 @@ function dispatchRule(key: string, value: string, rule: Rule): unknown {
   if (r.type === 'number') return validateNumber(key, value)
   if (r.type === 'boolean') return validateBoolean(key, value)
   if (r.type === 'url') return validateUrl(key, value)
-  if (r.type === 'custom') return validateCustom(key, value, r.validator, r.errorMessage)
+  if (r.type === 'custom')
+    return validateCustom(key, value, r.validator, r.errorMessage)
 
   const _exhaustive: never = r
   throw new ValidationError({
@@ -46,7 +47,12 @@ export function validateValue<T extends Rule>(
         message: `${key} is required and must be one of: ${enumRule.type.enum.join(', ')}`,
       })
     }
-    throw new ValidationError({ key, value: raw, code: 'REQUIRED', message: `${key} is required` })
+    throw new ValidationError({
+      key,
+      value: raw,
+      code: 'REQUIRED',
+      message: `${key} is required`,
+    })
   }
 
   if (value === undefined) {

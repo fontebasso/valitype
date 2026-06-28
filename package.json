@@ -1,6 +1,6 @@
 {
   "name": "valitype",
-  "description": "A lightweight TypeScript validation library for environment variables and configuration.",
+  "description": "Type-safe environment variable validation for TypeScript — zero dependencies, structured errors, and built-in validators.",
   "version": "2.0.0",
   "private": false,
   "type": "module",
@@ -48,15 +48,17 @@
   "homepage": "https://github.com/fontebasso/valitype#readme",
   "unpkg": "dist/valitype.umd.js",
   "keywords": [
-    "validator",
+    "env",
+    "environment-variables",
     "validation",
-    "type-checking",
-    "types",
+    "validator",
+    "typescript",
+    "type-safe",
+    "zero-dependencies",
     "configuration",
     "schema",
-    "typescript",
-    "javascript",
-    "lightweight"
+    "dotenv",
+    "nodejs"
   ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.62.0",

@@ -17,18 +17,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Fetch Node.js end-of-life data
-        id: endoflife
-        uses: sindrel/endoflife-github-action@5f91adaabc542a346876290ff0f447c7bc355f99
-        with:
-          product: nodejs
-
       - name: Compare supported versions against active versions
         id: compare
-        env:
-          VERSIONS: ${{ steps.endoflife.outputs.versions }}
         run: |
-          active=$(echo "$VERSIONS" | jq -r --arg today "$(date +%Y-%m-%d)" \
+          active=$(curl -sf https://endoflife.date/api/nodejs.json | jq -r --arg today "$(date +%Y-%m-%d)" \
             '[.[] | select(.eol > $today) | .cycle] | sort_by(tonumber) | join(",")')
 
           add=$(comm -23 \

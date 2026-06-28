@@ -1,4 +1,5 @@
-import { Rule, ValidatedValue, EnumRule, CustomRule } from './rules.js'
+import { Rule, ValidatedValue, EnumRule } from './rules.js'
+import { ValidationError } from './ValidationError.js'
 
 import { validateBoolean } from './validators/validateBoolean.js'
 import { validateCustom } from './validators/validateCustom.js'
@@ -17,7 +18,12 @@ function dispatchRule(key: string, value: string, rule: Rule): unknown {
   if (rule.type === 'custom')
     return validateCustom(key, value, rule.validator, rule.errorMessage)
   const _exhaustive: never = rule
-  throw new Error(`${key} has an unknown rule type: ${JSON.stringify((_exhaustive as Rule).type)}`)
+  throw new ValidationError({
+    key,
+    value,
+    code: 'UNKNOWN_RULE',
+    message: `${key} has an unknown rule type: ${JSON.stringify((_exhaustive as Rule).type)}`,
+  })
 }
 
 export function validateValue<T extends Rule>(
@@ -31,9 +37,14 @@ export function validateValue<T extends Rule>(
   if (rule.required && value === undefined) {
     if (typeof rule.type === 'object' && 'enum' in rule.type) {
       const enumRule = rule as EnumRule
-      throw new Error(`${key} is required and must be one of: ${enumRule.type.enum.join(', ')}`)
+      throw new ValidationError({
+        key,
+        value: raw,
+        code: 'REQUIRED',
+        message: `${key} is required and must be one of: ${enumRule.type.enum.join(', ')}`,
+      })
     }
-    throw new Error(`${key} is required`)
+    throw new ValidationError({ key, value: raw, code: 'REQUIRED', message: `${key} is required` })
   }
 
   if (value === undefined) {

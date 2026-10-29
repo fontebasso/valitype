@@ -8,7 +8,7 @@ await build({
   outfile: 'dist/index.js',
   bundle: true,
   format: 'esm',
-  target: 'node18',
+  target: 'node22',
   platform: 'neutral',
   minify: true,
 })

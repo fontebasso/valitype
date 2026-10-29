@@ -1,9 +1,13 @@
 # valitype
 
 [![tests](https://github.com/fontebasso/valitype/actions/workflows/tests.yml/badge.svg)](https://github.com/fontebasso/valitype/actions/workflows/tests.yml)
+[![CodeQL](https://github.com/fontebasso/valitype/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/fontebasso/valitype/actions/workflows/github-code-scanning/codeql)
+[![Coverage Status](https://coveralls.io/repos/github/fontebasso/valitype/badge.svg?branch=main)](https://coveralls.io/github/fontebasso/valitype?branch=main)
 [![npm](https://img.shields.io/npm/v/valitype)](https://www.npmjs.com/package/valitype)
 [![npm downloads](https://img.shields.io/npm/dw/valitype)](https://www.npmjs.com/package/valitype)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/valitype)](https://bundlephobia.com/package/valitype)
+[![size](https://img.shields.io/npm/unpacked-size/valitype)](https://www.npmjs.com/package/valitype)
+[![stars](https://img.shields.io/github/stars/fontebasso/valitype?style=flat)](https://github.com/fontebasso/valitype/stargazers)
 [![license](https://img.shields.io/npm/l/valitype)](LICENSE)
 
 Type-safe environment variable and runtime config validation for TypeScript and JavaScript — zero dependencies, structured errors, and built-in validators for common `process.env` and app config use cases.

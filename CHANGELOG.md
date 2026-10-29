@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [4.0.0] - 2026-10-29
 
 ### BREAKING
 
@@ -26,9 +26,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * `validators.date(format)` now accepts valid dates in non-ISO formats such as `DD/MM/YYYY`, which were always rejected.
 
+### Security
+
+* Updated the development dependency `brace-expansion` to `5.0.12`, which fixes GHSA-3jxr-9vmj-r5cp and GHSA-q2hr-2g5m-vwhr. It is not shipped in the package, which still has no runtime dependencies.
+
 ### Maintenance
 
-* Updated `typescript` to `6.0.3`, `vitest` and `@vitest/coverage-v8` to `5.0.5`.
+* Updated `typescript` to `6.0.3`, `vitest` and `@vitest/coverage-v8` to `5.0.5`, `eslint` to `10.13.0`, `@typescript-eslint/*` to `8.72.1`, `prettier` to `3.9.10`, `typedoc` to `0.28.20` and `esbuild` to `0.28.2`.
+* Updated GitHub Actions pins (`actions/checkout` `7.0.1`, `actions/setup-node` `7.1.0`).
+* TypeScript 7.0 updates are held until `@typescript-eslint` and `typedoc` support it.
+* Test coverage is now 100% and enforced in CI.
+* The documentation site keeps its `valitype.js.org` domain when the docs are regenerated.
 * The npm package no longer ships `README.typedoc.md`; the typedoc readme is now `typedoc-readme.md`, outside the package.
 * Release and coverage workflows now run on Node.js 26.
 * The ESM build targets Node.js 22, the minimum supported version, instead of Node.js 18.

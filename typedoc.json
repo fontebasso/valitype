@@ -1,6 +1,7 @@
 {
     "out": "docs",
     "entryPoints": ["src/core/rules.ts", "src/core/validateValue.ts", "src/core/ValidationError.ts", "src/core/validators/*.ts"],
-    "readme": "typedoc-readme.md"
+    "readme": "typedoc-readme.md",
+    "cname": "valitype.js.org"
   }
   

@@ -5,6 +5,12 @@ export type ValidationErrorCode =
   | 'INVALID_URL'
   | 'INVALID_ENUM'
   | 'INVALID_CUSTOM'
+  | 'TOO_SHORT'
+  | 'TOO_LONG'
+  | 'PATTERN_MISMATCH'
+  | 'INVALID_FORMAT'
+  | 'BELOW_MIN'
+  | 'ABOVE_MAX'
   | 'UNKNOWN_RULE'
 
 export class ValidationError extends Error {

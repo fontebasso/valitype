@@ -13,12 +13,12 @@ function dispatchRule(key: string, value: string, rule: Rule): unknown {
     return validateEnum(key, value, rule.type.enum)
 
   const r = rule as Exclude<Rule, EnumRule>
-  if (r.type === 'string') return validateString(key, value)
-  if (r.type === 'number') return validateNumber(key, value)
+  if (r.type === 'string') return validateString(key, value, r)
+  if (r.type === 'number') return validateNumber(key, value, r)
   if (r.type === 'boolean') return validateBoolean(key, value)
   if (r.type === 'url') return validateUrl(key, value)
   if (r.type === 'custom')
-    return validateCustom(key, value, r.validator, r.errorMessage)
+    return validateCustom(key, value, r.validator, r.message)
 
   const _exhaustive: never = r
   throw new ValidationError({
@@ -29,15 +29,11 @@ function dispatchRule(key: string, value: string, rule: Rule): unknown {
   })
 }
 
-export function validateValue<T extends Rule>(
-  key: string,
-  raw: string | undefined,
-  rule: T
-): ValidatedValue<T> {
+function check(key: string, raw: string | undefined, rule: Rule): unknown {
   const value =
     raw ?? (rule.default !== undefined ? String(rule.default) : undefined)
 
-  if (rule.required && value === undefined) {
+  if (rule.required && (value === undefined || value === '')) {
     if (typeof rule.type === 'object' && 'enum' in rule.type) {
       const enumRule = rule as EnumRule
       throw new ValidationError({
@@ -56,8 +52,27 @@ export function validateValue<T extends Rule>(
   }
 
   if (value === undefined) {
-    return undefined as unknown as ValidatedValue<T>
+    return undefined
   }
 
-  return dispatchRule(key, value, rule as Rule) as ValidatedValue<T>
+  return dispatchRule(key, value, rule)
+}
+
+export function validateValue<T extends Rule>(
+  key: string,
+  raw: string | undefined,
+  rule: T
+): ValidatedValue<T> {
+  try {
+    return check(key, raw, rule) as ValidatedValue<T>
+  } catch (err) {
+    if (rule.message === undefined || !(err instanceof ValidationError))
+      throw err
+    throw new ValidationError({
+      key,
+      value: err.value,
+      code: err.code,
+      message: rule.message,
+    })
+  }
 }

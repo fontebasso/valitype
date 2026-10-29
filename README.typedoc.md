@@ -40,7 +40,7 @@ If any value fails, a `ValidationError` is thrown with the field name, the recei
 - **Zero dependencies**: nothing to audit, nothing to break
 - **Type-safe by default**: `validateValue` returns the correct TypeScript type based on the rule
 - **Structured errors**: `ValidationError` carries `key`, `value`, and `code` so you can handle failures programmatically
-- **Strict by design**: numbers reject hex and scientific notation; URLs require `http`/`https`; date formats are actually enforced
+- **Strict by design**: numbers reject hex and scientific notation; URLs follow RFC 3986/3987; dates must exist in the calendar; `required` rejects empty strings
 
 ## Why not Zod, Joi, or Yup?
 
@@ -75,11 +75,58 @@ The test suite runs against all supported Node.js versions to ensure compatibili
 | `{ type: 'string' }` | `string` | |
 | `{ type: 'number' }` | `number` | Decimal only — rejects hex, scientific notation |
 | `{ type: 'boolean' }` | `boolean` | Accepts `'true'` or `'false'` only |
-| `{ type: 'url' }` | `string` | Requires `http` or `https` scheme |
+| `{ type: 'url' }` | `string` | RFC 3986 URI with `scheme://`, any scheme, international characters allowed |
 | `{ type: { enum: string[] } }` | `string` | Must be one of the listed values |
 | `{ type: 'custom', validator }` | `string` | Bring your own logic |
 
-All types accept `required?: boolean` and `default?: T`.
+All types accept `required?: boolean`, `default?: T` and `message?: string`.
+
+- `required: true` rejects both a missing value and an empty string.
+- `message` replaces the message of every failure of the rule; the `code` is kept.
+
+### String options
+
+```typescript
+validateValue('API_KEY', process.env.API_KEY, {
+  type: 'string',
+  required: true,
+  pattern: /^sk_/,
+  minLength: 32,
+  maxLength: 64,
+})
+
+validateValue('FEATURES', process.env.FEATURES, { type: 'string', format: 'json' })
+validateValue('LAUNCH_DATE', process.env.LAUNCH_DATE, { type: 'string', format: 'date' })
+```
+
+| Option | Code | Notes |
+|---|---|---|
+| `pattern` | `PATTERN_MISMATCH` | `RegExp` or any `{ test(value): boolean }`, not anchored |
+| `minLength` | `TOO_SHORT` | Inclusive, counts code points |
+| `maxLength` | `TOO_LONG` | Inclusive, counts code points |
+| `format: 'json'` | `INVALID_FORMAT` | |
+| `format: 'date'` | `INVALID_FORMAT` | `YYYY-MM-DD`, must exist in the calendar |
+
+Checks run in this order and stop at the first failure.
+
+`pattern` accepts a `Matcher` so you can plug in a linear-time engine such as RE2 for values you do not control:
+
+```typescript
+import { RE2JS } from 're2js'
+
+const re = RE2JS.compile('^[a-z0-9]+$')
+validateValue('SLUG', process.env.SLUG, {
+  type: 'string',
+  pattern: { test: (value) => re.matcher(value).find() },
+})
+```
+
+### Number options
+
+| Option | Code | Notes |
+|---|---|---|
+| `min` | `BELOW_MIN` | Inclusive |
+| `max` | `ABOVE_MAX` | Inclusive |
 
 ## Built-in validators
 
@@ -96,15 +143,22 @@ validators.date('YYYY-MM-DD')
 
 validators.json()
 
+validators.url()
+
 validators.awsArn('lambda')
 
 validators.all(
   validators.regex(/^[A-Z]/),
   validators.oneOf(['Alpha', 'Beta', 'Gamma'])
 )
+
+validators.all(
+  validators.url(),
+  validators.regex(/^https?:\/\//i, 'Must be http or https')
+)
 ```
 
-`validators.date('YYYY-MM-DD')` enforces the format, not just parseability. `validators.awsArn()` supports all AWS partitions: `aws`, `aws-cn`, and `aws-us-gov`.
+`validators.date('YYYY-MM-DD')` enforces the format and, when the format has `YYYY`, `MM` and `DD`, that the date exists (`2023-02-30` fails). `validators.awsArn()` supports all AWS partitions: `aws`, `aws-cn`, and `aws-us-gov`.
 
 ## Error handling
 
@@ -125,7 +179,14 @@ try {
 }
 ```
 
-Available codes: `REQUIRED` · `INVALID_NUMBER` · `INVALID_BOOLEAN` · `INVALID_URL` · `INVALID_ENUM` · `INVALID_CUSTOM` · `UNKNOWN_RULE`
+Available codes: `REQUIRED` · `INVALID_NUMBER` · `INVALID_BOOLEAN` · `INVALID_URL` · `INVALID_ENUM` · `INVALID_CUSTOM` · `TOO_SHORT` · `TOO_LONG` · `PATTERN_MISMATCH` · `INVALID_FORMAT` · `BELOW_MIN` · `ABOVE_MAX` · `UNKNOWN_RULE`
+
+## Migrating from 3.x
+
+- `required: true` now rejects an empty string with `REQUIRED`. Drop `required` if an empty value is valid.
+- `url` accepts any scheme (`postgres://`, `redis://`, `file://`...) and follows RFC 3986/3987 instead of the WHATWG parser. To keep http/https only, use `{ type: 'custom', validator: validators.all(validators.url(), validators.regex(/^https?:\/\//i)) }`.
+- `validators.date(format)` rejects dates that do not exist, such as `2023-02-30`.
+- `errorMessage` on custom rules is now `message`.
 
 ## Security and supply chain
 

@@ -20,11 +20,11 @@ describe('Custom validators', () => {
       )
     })
 
-    it('should use errorMessage when validator returns false', () => {
+    it('should use message when validator returns false', () => {
       const rule = {
         type: 'custom' as const,
         validator: (value: string | undefined) => value === 'valid',
-        errorMessage: 'Custom error message',
+        message: 'Custom error message',
         required: true,
       }
 

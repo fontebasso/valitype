@@ -1,31 +1,44 @@
+export type Matcher = { test(value: string): boolean }
+
 export type StringRule = {
   type: 'string'
   required?: boolean
   default?: string
+  message?: string
+  minLength?: number
+  maxLength?: number
+  pattern?: RegExp | Matcher
+  format?: 'json' | 'date'
 }
 
 export type NumberRule = {
   type: 'number'
   required?: boolean
   default?: number
+  message?: string
+  min?: number
+  max?: number
 }
 
 export type BooleanRule = {
   type: 'boolean'
   required?: boolean
   default?: boolean
+  message?: string
 }
 
 export type UrlRule = {
   type: 'url'
   required?: boolean
   default?: string
+  message?: string
 }
 
 export type EnumRule = {
   type: { enum: string[] }
   required?: boolean
   default?: string
+  message?: string
 }
 
 export type CustomValidatorFn = (value: string | undefined) => boolean | string
@@ -35,7 +48,7 @@ export type CustomRule = {
   validator: CustomValidatorFn
   required?: boolean
   default?: string
-  errorMessage?: string
+  message?: string
 }
 
 export type Rule =

@@ -54,6 +54,13 @@ describe('isUrl (RFC 3986 with RFC 3987 characters, scheme:// required)', () => 
     expect(isUrl(value)).toBe(false)
   })
 
+  it('runs in linear time on authorities that never reach a path', () => {
+    const value = `"://${'"'.repeat(100_000)}#\n`
+    const started = performance.now()
+    expect(isUrl(value)).toBe(false)
+    expect(performance.now() - started).toBeLessThan(1000)
+  })
+
   it.each([
     '::',
     '::1',

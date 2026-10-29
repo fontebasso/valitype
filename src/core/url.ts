@@ -28,7 +28,8 @@ const IP_FUTURE = new RegExp(`^v[0-9A-Fa-f]+\\.[${UNRESERVED}${SUB_DELIMS}:]+$`)
 const H16 = /^[0-9A-Fa-f]{1,4}$/
 const DEC_OCTET = /^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)$/
 
-const PARTS = /^([^:/?#]+):\/\/([^/?#]*)([^?#]*)(?:\?([^#]*))?(?:#(.*))?$/u
+const PARTS =
+  /^([^:/?#]+):\/\/([^/?#]*)((?:\/[^?#]*)?)(?:\?([^#]*))?(?:#(.*))?$/u
 
 export function isUrl(value: string): boolean {
   const parts = PARTS.exec(value)

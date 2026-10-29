@@ -4,6 +4,17 @@
     "config:recommended",
     "helpers:pinGitHubActionDigests"
   ],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/bower_components/**",
+    "**/vendor/**",
+    "**/examples/**",
+    "**/__tests__/**",
+    "**/test/**",
+    "**/tests/**",
+    "**/__fixtures__/**",
+    "docs/**"
+  ],
   "packageRules": [
     {
       "matchPackageNames": ["typescript"],

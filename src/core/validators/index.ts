@@ -1,19 +1,52 @@
+import type { Matcher } from '../rules.js'
+import { isUrl } from '../url.js'
+
 export type CustomValidatorFn = (value: string | undefined) => boolean | string
 
 const DECIMAL_RE = /^-?\d+(\.\d+)?$/
 
-function formatToRegex(format: string): RegExp {
-  const pattern = format
-    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    .replace(/Y/g, '\\d')
-    .replace(/M/g, '\\d')
-    .replace(/D/g, '\\d')
-  return new RegExp(`^${pattern}$`)
+type DatePart = 'YYYY' | 'MM' | 'DD'
+
+function formatToRegex(format: string): { regex: RegExp; parts: DatePart[] } {
+  const parts: DatePart[] = []
+  const pattern = format.replace(
+    /YYYY|MM|DD|[YMD]|[.*+?^${}()|[\]\\]/g,
+    (token) => {
+      if (token === 'YYYY' || token === 'MM' || token === 'DD') {
+        parts.push(token)
+        return `(\\d{${token.length}})`
+      }
+      if (token === 'Y' || token === 'M' || token === 'D') return '\\d'
+      return `\\${token}`
+    }
+  )
+  return { regex: new RegExp(`^${pattern}$`), parts }
+}
+
+function isCalendarDate(year: number, month: number, day: number) {
+  const date = new Date(0)
+  date.setUTCFullYear(year, month - 1, day)
+  return (
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  )
+}
+
+function matchesDateFormat(format: string, value: string): boolean | null {
+  const { regex, parts } = formatToRegex(format)
+  const match = regex.exec(value)
+  if (!match) return false
+  const fields: Partial<Record<DatePart, number>> = {}
+  parts.forEach((part, index) => (fields[part] = Number(match[index + 1])))
+  const { YYYY, MM, DD } = fields
+  if (YYYY === undefined || MM === undefined || DD === undefined) return null
+  return isCalendarDate(YYYY, MM, DD)
 }
 
 export const validators = {
   regex:
-    (pattern: RegExp, errorMsg?: string): CustomValidatorFn =>
+    (pattern: RegExp | Matcher, errorMsg?: string): CustomValidatorFn =>
     (value) => {
       if (value === undefined) return true
       return pattern.test(value)
@@ -46,13 +79,15 @@ export const validators = {
     (format?: string, errorMsg?: string): CustomValidatorFn =>
     (value) => {
       if (value === undefined) return true
-      if (format && !formatToRegex(format).test(value))
-        return errorMsg || `Value must be a valid date in format ${format}`
+      const invalid =
+        errorMsg ||
+        `Value must be a valid date${format ? ` in format ${format}` : ''}`
+      if (format) {
+        const calendar = matchesDateFormat(format, value)
+        if (calendar !== null) return calendar || invalid
+      }
       const date = new Date(value)
-      return !isNaN(date.getTime())
-        ? true
-        : errorMsg ||
-            `Value must be a valid date${format ? ` in format ${format}` : ''}`
+      return !isNaN(date.getTime()) ? true : invalid
     },
 
   json:
@@ -65,6 +100,13 @@ export const validators = {
       } catch {
         return errorMsg || 'Value must be valid JSON'
       }
+    },
+
+  url:
+    (errorMsg?: string): CustomValidatorFn =>
+    (value) => {
+      if (value === undefined) return true
+      return isUrl(value) || errorMsg || 'Value must be a valid URL'
     },
 
   awsArn:

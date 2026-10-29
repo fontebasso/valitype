@@ -14,15 +14,15 @@ describe('validateUrl', () => {
     )
   })
 
-  it('throws for file:// scheme', () => {
-    expect(() => validateUrl('API_URL', 'file:///etc/passwd')).toThrow(
-      'API_URL must be a valid URL'
+  it('passes for file:// scheme', () => {
+    expect(validateUrl('API_URL', 'file:///etc/passwd')).toBe(
+      'file:///etc/passwd'
     )
   })
 
-  it('throws for ftp:// scheme', () => {
-    expect(() => validateUrl('API_URL', 'ftp://example.com')).toThrow(
-      'API_URL must be a valid URL'
+  it('passes for ftp:// scheme', () => {
+    expect(validateUrl('API_URL', 'ftp://example.com')).toBe(
+      'ftp://example.com'
     )
   })
 

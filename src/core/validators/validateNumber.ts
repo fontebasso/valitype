@@ -1,8 +1,13 @@
+import type { NumberRule } from '../rules.js'
 import { ValidationError } from '../ValidationError.js'
 
 const DECIMAL_RE = /^-?\d+(\.\d+)?$/
 
-export function validateNumber(key: string, value: string | undefined): number {
+export function validateNumber(
+  key: string,
+  value: string | undefined,
+  rule: Omit<NumberRule, 'type'> = {}
+): number {
   if (value === undefined)
     throw new ValidationError({
       key,
@@ -17,5 +22,20 @@ export function validateNumber(key: string, value: string | undefined): number {
       code: 'INVALID_NUMBER',
       message: `${key} must be a valid number`,
     })
-  return Number(value)
+  const num = Number(value)
+  if (rule.min !== undefined && num < rule.min)
+    throw new ValidationError({
+      key,
+      value,
+      code: 'BELOW_MIN',
+      message: `${key} must be greater than or equal to ${rule.min}`,
+    })
+  if (rule.max !== undefined && num > rule.max)
+    throw new ValidationError({
+      key,
+      value,
+      code: 'ABOVE_MAX',
+      message: `${key} must be less than or equal to ${rule.max}`,
+    })
+  return num
 }

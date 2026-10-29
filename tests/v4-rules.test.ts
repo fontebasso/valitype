@@ -248,4 +248,26 @@ describe('validators', () => {
       `Value must be a valid date in format ${format}`
     )
   })
+
+  it('date escapes regex metacharacters in the format', () => {
+    const fn = validators.date('YYYY.MM.DD')
+    expect(fn('2024.02.29')).toBe(true)
+    expect(fn('2024x02x29')).toBe(
+      'Value must be a valid date in format YYYY.MM.DD'
+    )
+  })
+
+  it('date treats a single Y, M or D as one digit', () => {
+    const fn = validators.date('YYYY-M-D')
+    expect(fn('2024-2-9')).toBe(true)
+    expect(fn('2024-02-09')).toBe(
+      'Value must be a valid date in format YYYY-M-D'
+    )
+  })
+
+  it('date falls back to Date parsing when the format lacks YYYY, MM or DD', () => {
+    const fn = validators.date('YYYY-MM')
+    expect(fn('2024-02')).toBe(true)
+    expect(fn('2024-13')).toBe('Value must be a valid date in format YYYY-MM')
+  })
 })

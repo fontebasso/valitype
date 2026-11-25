@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.1] - 2026-11-25
+
+### Maintenance
+
+* Updated `eslint` to `10.15.0`, `@typescript-eslint/*` to `8.74.0`, `vitest` and `@vitest/coverage-v8` to `5.1.2`, `fast-check` to `4.11.0` and `prettier` to `3.10.1`.
+* Renovate no longer opens updates for the generated documentation.
+* No changes to the public API or validation behavior. The package still has no runtime dependencies.
+
 ## [4.0.0] - 2026-10-29
 
 ### BREAKING
